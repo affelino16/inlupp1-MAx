@@ -158,11 +158,13 @@ void print_hash(ioopm_hash_table_t *ht) {
 }
 
 
-/* int main() {
+int main() {
   int value;
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
   print_hash(ht);
   ioopm_hash_table_insert(ht,"hej", 42);
+    print_hash(ht);
+  ioopm_hash_table_insert(ht,"hej", 22);
   ioopm_hash_table_insert(ht,"Jolmar", 42);
   ioopm_hash_table_insert(ht,"hje", 12);
   ioopm_hash_table_insert(ht,"tjoj", 42);
@@ -177,7 +179,7 @@ void print_hash(ioopm_hash_table_t *ht) {
   print_hash(ht);
   ioopm_hash_table_destroy(ht);
   return 0;
-} */
+}
 
 
 

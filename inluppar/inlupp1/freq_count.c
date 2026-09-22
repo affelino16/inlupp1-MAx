@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "hash_table.h"
+#include "hash_table_iterator.h"
 #define Delimiters "+-#@()[]{}.,:;!? \t\n\r"
 /// @brief Process a single word, updating its frequency
 /// @param word the word to process
@@ -10,12 +11,18 @@
 void process_word(char *word, ioopm_hash_table_t *ht)
 {
 // FIXME: Rewrite to match your own interface, error-handling, etc.
-int value
-int freq =
-ioopm_hash_table_has_key(ht, word)?
-ioopm_hash_table_lookup(ht, word, &value):
-0;
-ioopm_hash_table_insert(ht, strdup(word), freq + 1);
+    int value;
+    int freq;
+    if (ioopm_hash_table_has_key(ht, word)) {
+        ioopm_hash_table_lookup(ht, word, &value);
+        freq = value + 1;
+        ioopm_hash_table_insert(ht, word, freq);
+
+    } else {
+        freq = 1;
+        ioopm_hash_table_insert(ht, strdup(word), freq);
+    }
+
 }
 /// @brief Process a single file, updating the frequencies of its words
 /// @param filename the name of the file to process
@@ -23,6 +30,9 @@ ioopm_hash_table_insert(ht, strdup(word), freq + 1);
 void process_file(char *filename, ioopm_hash_table_t *ht)
 {
 FILE *f = fopen(filename, "r");
+if (f == NULL) {
+    printf("filen %s existerar ej", filename);
+}
 while (true)
 {
 char *buf = NULL;
@@ -88,14 +98,25 @@ process_file(argv[i], ht);
 }
 int size = ioopm_hash_table_size(ht);
 struct freq_word freq_words[size];
-// FIXME: Iterate over hash table to dump its words and
-// frequencies into the array above
+ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
+int j = 0;
+while(!ioopm_hash_table_iterator_at_end(it)) {
+   char *key = ioopm_hash_table_iterator_current_key(it);
+   int value = ioopm_hash_table_iterator_current_value(it);
+   freq_words[j].word = key;
+   freq_words[j].freq = value;
+   j++;
+   ioopm_hash_table_iterator_advance(it);
+   
+}
 sort_freq_words(freq_words, size);
 for (int i = 0; i < size; ++i)
 {
 printf("%s: %d\n", freq_words[i].word, freq_words[i].freq);
 }
-// FIXME: Leaks memory! Use valgrind to find out where that memory is
-// being allocated, and then insert code here to free it.
+for (int i = 0; i < size; i++) {
+    free(freq_words[i].word);
+}
+ioopm_hash_table_iterator_destroy(it);
 ioopm_hash_table_destroy(ht);
 }
