@@ -31,13 +31,15 @@ void process_file(char *filename, ioopm_hash_table_t *ht)
 {
 FILE *f = fopen(filename, "r");
 if (f == NULL) {
-    printf("filen %s existerar ej", filename);
+    printf("filen %s existerar ej\n", filename);
+    return;
 }
 while (true)
 {
 char *buf = NULL;
 size_t len = 0;
 getline(&buf, &len, f);
+
 if (feof(f))
 {
 free(buf);

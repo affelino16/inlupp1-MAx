@@ -1,3 +1,43 @@
+#include <CUnit/Basic.h>
+#include "hash_table.h"
+#include "hash_table_iterator.h"
+
+
+int init_suite(void) {
+  // Change this function if you want to do something *before* you
+  // run a test suite
+  return 0;
+}
+
+int clean_suite(void) {
+  // Change this function if you want to do something *after* you
+  // run a test suite
+  return 0;
+}
+
+
+void test (){
+
+  CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
+  CU_ASSERT_EQUAL(result, 0);
+
+
+  ioopm_hash_table_insert(ht, key, value);
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
+  CU_ASSERT_EQUAL(result, value);
+
+  ioopm_hash_table_remove(ht, key);
+  CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
+  CU_ASSERT_EQUAL(result, 0);
+ 
+  ioopm_hash_table_destroy(ht);
+}
+
+
+
+
+
+
 int main() {
   // First we try to set up CUnit, and exit if we fail
   if (CU_initialize_registry() != CUE_SUCCESS)
@@ -18,7 +58,7 @@ int main() {
   // the test in question. If you want to add another test, just
   // copy a line below and change the information
   if (
-    (CU_add_test(my_test_suite, "A simple test", test_iterator_several_entries) == NULL)
+    (CU_add_test(my_test_suite, "A simple test", ) == NULL)
   )
     {
       // If adding any of the tests fails, we tear down CUnit and exit

@@ -61,6 +61,7 @@ ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t
     it->current_bucket = 0;
     it->current_entry = &ht->buckets[0];
     skip_sentinel_nodes(it);
+    return it;
 }
 
 
@@ -82,7 +83,8 @@ void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it) {
         it->current_entry = it->current_entry->next;
     } else {
         it->current_bucket++;
-        it->current_entry = find_first_entry(it->ht, &it->current_bucket);
+        it->current_entry = &it->ht->buckets[it->current_bucket];
+        skip_sentinel_nodes(it);
     }
 }
 

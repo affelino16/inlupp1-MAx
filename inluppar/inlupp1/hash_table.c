@@ -158,7 +158,7 @@ void print_hash(ioopm_hash_table_t *ht) {
 }
 
 
-int main() {
+/* int main() {
   int value;
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
   print_hash(ht);
@@ -179,7 +179,7 @@ int main() {
   print_hash(ht);
   ioopm_hash_table_destroy(ht);
   return 0;
-}
+} */
 
 
 
