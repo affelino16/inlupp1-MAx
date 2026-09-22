@@ -51,6 +51,7 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht) {
       current = next;
     }
   }
+  free(ht->size);
   free(ht);
   return;
 }
