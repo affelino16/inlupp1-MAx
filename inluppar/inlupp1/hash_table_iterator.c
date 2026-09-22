@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <assert.h>
 #define No_Buckets 17
 
 struct entry
@@ -23,28 +24,43 @@ struct hash_table
 
 struct hash_table_iterator {
     ioopm_hash_table_t *ht;
-    int bucket;
-    entry_t *current;
+    int current_bucket;
+    entry_t *current_entry;
 };
 
 
-static entry_t * find_first_entry(ioopm_hash_table_t *ht, int *first_bucket) {
-    for (int i = *first_bucket; i < No_Buckets; i++) {
-        if(ht->buckets[i].next != NULL) {
-            *first_bucket = i;
-            return ht->buckets[*first_bucket].next;
-        }
-    } *first_bucket = No_Buckets;
-      return NULL;
+static void advance_iterator_state(ioopm_hash_table_iterator_t *it)
+{
+  it->current_entry = it->current_entry->next;
 
+  if (it->current_entry == NULL)
+  {
+    it->current_bucket += 1;
+
+
+    if (it->current_bucket != No_Buckets)
+    {
+      it->current_entry = &it->ht->buckets[it->current_bucket];
+     }
+  }
 }
+
+static void skip_sentinel_nodes(ioopm_hash_table_iterator_t *it)
+{
+  while (it->current_bucket != No_Buckets &&
+         it->current_entry == &it->ht->buckets[it->current_bucket])
+  {
+    advance_iterator_state(it);
+  }
+}
+
 
 ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t *ht) {
     ioopm_hash_table_iterator_t *it = calloc(1, sizeof(ioopm_hash_table_iterator_t));
     it->ht = ht;
-    it->bucket = 0;
-    it->current = find_first_entry(ht, &it->bucket);
-    return it;
+    it->current_bucket = 0;
+    it->current_entry = &ht->buckets[0];
+    skip_sentinel_nodes(it);
 }
 
 
@@ -54,28 +70,28 @@ void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it) {
 
 
 bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it) {
-   if (it->current->next == NULL) {
+   if (it->current_entry == NULL) {
     return true;
    } else return false;
 }
 
 
 void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it) {
-   
-    if (it->current->next != NULL) {
-        it->current = it->current->next;
+    assert(!ioopm_hash_table_iterator_at_end(it) && "iterator at end when advancing");
+    if (it->current_entry->next != NULL) {
+        it->current_entry = it->current_entry->next;
     } else {
-        it->bucket++;
-        it->current = find_first_entry(it->ht, &it->bucket);
+        it->current_bucket++;
+        it->current_entry = find_first_entry(it->ht, &it->current_bucket);
     }
 }
 
 
 char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it) {
-    return it->current->key;
+    return it->current_entry->key;
 }
 
 
 int ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it) {
-    return it->current->value;
+    return it->current_entry->value;
 }

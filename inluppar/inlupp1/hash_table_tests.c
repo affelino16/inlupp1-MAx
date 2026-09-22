@@ -117,7 +117,8 @@ void test_iterator_several_entries()
     ioopm_hash_table_iterator_advance(it);
   }
 
-  ioopm_hash_table_iterator_destroy(ht);
+  ioopm_hash_table_iterator_destroy(it);
+  ioopm_hash_table_destroy(ht);
   CU_ASSERT_EQUAL(iteration_count, 3);
 }
 
@@ -142,7 +143,7 @@ int main() {
   // the test in question. If you want to add another test, just
   // copy a line below and change the information
   if (
-    (CU_add_test(my_test_suite, "A simple test", test_bool_and_size) == NULL)
+    (CU_add_test(my_test_suite, "A simple test", test_iterator_several_entries) == NULL)
   )
     {
       // If adding any of the tests fails, we tear down CUnit and exit
@@ -163,4 +164,4 @@ int main() {
 } 
 
 
-// gcc -Wall hash_table.c hash_table_tests.c -o hash_table_tests -lcunit
+// gcc -Wall hash_table.c hash_table_iterator.c hash_table_tests.c -o hash_table_tests -lcunit
