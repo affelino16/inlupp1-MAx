@@ -61,15 +61,21 @@ bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it) {
 
 
 void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it) {
-
+   
+    if (it->current->next != NULL) {
+        it->current = it->current->next;
+    } else {
+        it->bucket++;
+        it->current = find_first_entry(it->ht, &it->bucket);
+    }
 }
 
 
 char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it) {
-
+    return it->current->key;
 }
 
 
 int ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it) {
-
+    return it->current->value;
 }
