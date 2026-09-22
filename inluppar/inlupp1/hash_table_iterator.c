@@ -9,24 +9,39 @@
 
 
 struct hash_table_iterator {
-    
-}
+    ioopm_hash_table_t *ht;
+    int bucket;
+    entry_t *current;
+};
 
 ioopm_hash_table_iterator_t *ioopm_hash_table_iterator_create(ioopm_hash_table_t *ht) {
-    return calloc(1, sizeof(ioopm_hash_table_iterator_t))
+    ioopm_hash_table_iterator_t *it = calloc(1, sizeof(ioopm_hash_table_iterator_t));
+    it->ht = ht;
+    it->bucket = 0;
+    it cu
 }
 
 
-void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it);
+void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it) {
+
+}
 
 
-bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it);
+bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it) {
+
+}
 
 
-void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it);
+void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it) {
+
+}
 
 
-char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it);
+char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it) {
+
+}
 
 
-int ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it);
+int ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it) {
+
+}

@@ -7,7 +7,6 @@
 #include <string.h>
 #define No_Buckets 17
 
-typedef struct entry entry_t;
 
 struct entry
 {

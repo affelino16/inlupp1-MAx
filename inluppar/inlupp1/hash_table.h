@@ -17,6 +17,7 @@
 */
 
 typedef struct hash_table ioopm_hash_table_t;
+typedef struct entry entry_t;
 
 /// @brief Create a new hash table with size 0
 /// @return A new empty hash table
