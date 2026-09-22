@@ -1,5 +1,6 @@
 #include <CUnit/Basic.h>
 #include "hash_table.h"
+#include "hash_table_iterator.h"
 
 int init_suite(void) {
   // Change this function if you want to do something *before* you
@@ -42,6 +43,85 @@ void test_insert_once()
   ioopm_hash_table_destroy(ht);
 }
 
+void test_remove_once()
+{
+
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+  char *key = "abc";
+  int value = 123;
+
+
+  int result = 0;
+  CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
+  CU_ASSERT_EQUAL(result, 0);
+
+
+  ioopm_hash_table_insert(ht, key, value);
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
+  CU_ASSERT_EQUAL(result, value);
+
+  ioopm_hash_table_remove(ht, key);
+  CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
+  CU_ASSERT_EQUAL(result, 0);
+ 
+  ioopm_hash_table_destroy(ht);
+}
+
+
+  void test_bool_and_size() 
+{
+
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
+  char *key = "abc";
+  int value = 123;
+
+
+  
+  CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, key));
+  CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 0);
+
+
+  ioopm_hash_table_insert(ht, key, value);
+  CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key));
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 1);
+  CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+
+  ioopm_hash_table_remove(ht, key);
+  CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, key));
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 0);
+  CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+ 
+  ioopm_hash_table_destroy(ht);
+}
+
+void test_iterator_several_entries()
+{
+  char *keys[3] = {"abc", "qwe", "asd"};
+  int values[3] = {0, 1, 2};
+
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  for (int i = 0; i != 3; ++i)
+  {
+    ioopm_hash_table_insert(ht, keys[i], values[i]);
+  }
+
+  int iteration_count = 0;
+
+  ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
+  while (!ioopm_hash_table_iterator_at_end(it))
+  {
+    iteration_count++;
+    ioopm_hash_table_iterator_advance(it);
+  }
+
+  ioopm_hash_table_iterator_destroy(ht);
+  CU_ASSERT_EQUAL(iteration_count, 3);
+}
+
+
 int main() {
   // First we try to set up CUnit, and exit if we fail
   if (CU_initialize_registry() != CUE_SUCCESS)
@@ -62,7 +142,7 @@ int main() {
   // the test in question. If you want to add another test, just
   // copy a line below and change the information
   if (
-    (CU_add_test(my_test_suite, "A simple test", test_insert_once) == NULL)
+    (CU_add_test(my_test_suite, "A simple test", test_bool_and_size) == NULL)
   )
     {
       // If adding any of the tests fails, we tear down CUnit and exit

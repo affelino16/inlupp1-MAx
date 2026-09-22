@@ -18,7 +18,7 @@
 
 typedef struct hash_table ioopm_hash_table_t;
 
-/// @brief Create a new hash table
+/// @brief Create a new hash table with size 0
 /// @return A new empty hash table
 ioopm_hash_table_t *ioopm_hash_table_create(void);
 
@@ -35,11 +35,27 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, char *key, int value);
 /// @brief lookup value for key in hash table ht
 /// @param ht hash table operated upon
 /// @param key key to lookup
-/// @return the value mapped to by key (FIXME: what if the key does not exist?)
+/// @return boolean if key is in hash table or not and value of key
 bool ioopm_hash_table_lookup(ioopm_hash_table_t *ht, char *key, int *result);
 
 /// @brief remove any mapping from key to a value
 /// @param ht hash table operated upon
 /// @param key key to remove
-/// @return the value mapped to by key (FIXME: what if the key does not exist?)
+/// @return the value mapped to by key
 int ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key);
+
+/// @brief check if key is in hash table
+/// @param ht hash table operated upon
+/// @param key key to check
+/// @return boolean if key is in hash table
+bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, char *key);
+
+/// @brief check if hash table is empty
+/// @param ht hash table operated upon
+/// @return boolean if hash table is empty or not
+bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht);
+
+/// @brief get the size of hash table
+/// @param ht hash table operated upon
+/// @return the size of hash table
+int ioopm_hash_table_size(ioopm_hash_table_t *ht);
