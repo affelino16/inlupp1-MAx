@@ -16,7 +16,7 @@ int clean_suite(void) {
 }
 
 
-void test (){
+void test(){
 
   CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
   CU_ASSERT_EQUAL(result, 0);

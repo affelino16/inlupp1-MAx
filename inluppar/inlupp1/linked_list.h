@@ -2,6 +2,8 @@
 #include <stdbool.h>
 
 typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
+typedef struct node node_t;
+
 
 /// @brief Creates a new empty list
 /// @return an empty linked list
