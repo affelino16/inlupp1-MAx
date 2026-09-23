@@ -10,16 +10,16 @@
 
 struct entry
 {
-  char *key;     
-  int value;     
-  entry_t *next;
+    char *key;
+    int value;
+    entry_t *next;
 };
 
 struct hash_table
 {
 
-  entry_t buckets[No_Buckets];
-  int size;
+    entry_t buckets[No_Buckets];
+    int size;
 };
 
 struct hash_table_iterator {
@@ -31,27 +31,27 @@ struct hash_table_iterator {
 
 static void advance_iterator_state(ioopm_hash_table_iterator_t *it)
 {
-  it->current_entry = it->current_entry->next;
+    it->current_entry = it->current_entry->next;
 
-  if (it->current_entry == NULL)
-  {
-    it->current_bucket += 1;
-
-
-    if (it->current_bucket != No_Buckets)
+    if (it->current_entry == NULL)
     {
-      it->current_entry = &it->ht->buckets[it->current_bucket];
-     }
-  }
+        it->current_bucket += 1;
+
+
+        if (it->current_bucket != No_Buckets)
+        {
+            it->current_entry = &it->ht->buckets[it->current_bucket];
+        }
+    }
 }
 
 static void skip_sentinel_nodes(ioopm_hash_table_iterator_t *it)
 {
-  while (it->current_bucket != No_Buckets &&
-         it->current_entry == &it->ht->buckets[it->current_bucket])
-  {
-    advance_iterator_state(it);
-  }
+    while (it->current_bucket != No_Buckets &&
+            it->current_entry == &it->ht->buckets[it->current_bucket])
+    {
+        advance_iterator_state(it);
+    }
 }
 
 
@@ -71,9 +71,9 @@ void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it) {
 
 
 bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it) {
-   if (it->current_entry == NULL) {
-    return true;
-   } else return false;
+    if (it->current_entry == NULL) {
+        return true;
+    } else return false;
 }
 
 
