@@ -79,13 +79,10 @@ bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it) {
 
 void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it) {
     assert(!ioopm_hash_table_iterator_at_end(it) && "iterator at end when advancing");
-    if (it->current_entry->next != NULL) {
-        it->current_entry = it->current_entry->next;
-    } else {
-        it->current_bucket++;
-        it->current_entry = &it->ht->buckets[it->current_bucket];
-        skip_sentinel_nodes(it);
-    }
+    
+    advance_iterator_state(it);
+    skip_sentinel_nodes(it);
+    
 }
 
 

@@ -7,16 +7,16 @@
 #include <string.h>
 #define No_Buckets 17
 
+//M37, M38, J26, J27
 
-struct entry
-{
+struct entry {
+
     char *key;
     int value;
     entry_t *next;
 };
 
-struct hash_table
-{
+struct hash_table {
 
     entry_t buckets[No_Buckets];
     int size;
@@ -113,7 +113,7 @@ int ioopm_hash_table_remove(ioopm_hash_table_t *ht, char *key) {
     entry_t *previous = find_previous_entry(ht, key);
     while (previous->next != NULL) {
         if (strcmp(key, previous->next->key) == 0) {
-            entry_t *tmp =previous->next;
+            entry_t *tmp = previous->next;
             int removed_value = tmp->value;
             previous->next =previous->next->next;
             entry_destroy(tmp);
