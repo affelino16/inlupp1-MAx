@@ -6,16 +6,17 @@
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
+#include "common.h"
 
 struct node {
-    int value;
+    elem_t value;
     struct node *next;
 };
 
 struct list {
     node_t *head;
     node_t *last;
-    int size;
+    size_t size;
 };
 
 
@@ -53,17 +54,17 @@ void ioopm_list_iterator_advance(ioopm_list_iterator_t *iter) {
     
 }
 
-int ioopm_list_iterator_current(ioopm_list_iterator_t *iter) {
+elem_t ioopm_list_iterator_current(ioopm_list_iterator_t *iter) {
     assert(!ioopm_list_iterator_at_end(iter));
     return iter->current->value;
     
 }
 
 
-int ioopm_list_iterator_remove(ioopm_list_iterator_t *iter) {
+elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter) {
     
     node_t *removed = iter->current;
-    int value = removed->value;
+    elem_t value = removed->value;
     node_t *next = removed->next;
 
     if (iter->previous == NULL) {
@@ -85,7 +86,7 @@ int ioopm_list_iterator_remove(ioopm_list_iterator_t *iter) {
 }
 
 
-void ioopm_list_iterator_insert(ioopm_list_iterator_t *iter, int element) {
+void ioopm_list_iterator_insert(ioopm_list_iterator_t *iter, elem_t element) {
     node_t *next = iter->current;
     node_t *new = new_node(element, next);
     if (iter->previous == NULL) {

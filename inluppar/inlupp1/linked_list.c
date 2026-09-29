@@ -5,16 +5,17 @@
 #include <string.h>
 #include "linked_list.h"
 #include <assert.h>
+#include "common.h"
 
 struct node {
-    int value;
+    elem_t value;
     struct node *next;
 };
 
 struct list {
     node_t *head;
     node_t *last;
-    int size;
+    size_t size;
 };
 
 ioopm_list_t *ioopm_list_create() {
@@ -33,14 +34,14 @@ void ioopm_list_destroy(ioopm_list_t *list) {
     free(list);
 }
 
- node_t *new_node(int value, node_t *next) {
+ node_t *new_node(elem_t value, node_t *next) {
     node_t *node = calloc(1, sizeof(node_t));
     node->value= value;
     node->next = next;
     return node;
 }
 
-void ioopm_list_append(ioopm_list_t *list, int value) {
+void ioopm_list_append(ioopm_list_t *list, elem_t value) {
     node_t *node = new_node(value, NULL);
     if (list->head == NULL) {
         list->head = node;
@@ -52,7 +53,7 @@ void ioopm_list_append(ioopm_list_t *list, int value) {
     list->size++;
 }
 
-void ioopm_list_prepend(ioopm_list_t *list, int value) {
+void ioopm_list_prepend(ioopm_list_t *list, elem_t value) {
     node_t *head = new_node(value, list->head);
     if (list->head == NULL) {
         list->head = head;
@@ -63,29 +64,29 @@ void ioopm_list_prepend(ioopm_list_t *list, int value) {
     list->size++;
 }
 
-int ioopm_list_size(ioopm_list_t *list) {
+size_t ioopm_list_size(ioopm_list_t *list) {
     return list->size;
 }
 
-int ioopm_list_get(ioopm_list_t *list, int index) {
+elem_t ioopm_list_get(ioopm_list_t *list, size_t index) {
 
     assert(!ioopm_list_is_empty(list));
     assert(index >= 0);
     assert(index < list->size);
 
     node_t *element = list->head;
-    for (int i = 0; i < index; i++) {
+    for (size_t i = 0; i < index; i++) {
         element = element->next;
     }
     return element->value;
 
 }
 
-int ioopm_list_head(ioopm_list_t *list) {
+elem_t ioopm_list_head(ioopm_list_t *list) {
     return list->head->value;
 }
 
-int ioopm_list_last(ioopm_list_t *list) {
+elem_t ioopm_list_last(ioopm_list_t *list) {
     return list->last->value;
 }
 
@@ -99,7 +100,7 @@ bool ioopm_list_is_empty(ioopm_list_t *list) {
     return false;
 }
 
-void ioopm_list_insert(ioopm_list_t *list, int index, int value) {
+void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t value) {
     assert(index>=0);
     assert(index<=list->size);
     if (index == 0) {
@@ -109,7 +110,7 @@ void ioopm_list_insert(ioopm_list_t *list, int index, int value) {
     } else {
         node_t *inserted_node;
         node_t *previous = list->head;
-        for (int i = 0; i < index-1; i++) {
+        for (size_t i = 0; i < index-1; i++) {
             previous = previous->next;
         }
         inserted_node = new_node(value, previous->next);
@@ -120,7 +121,7 @@ void ioopm_list_insert(ioopm_list_t *list, int index, int value) {
 }
 
 
-int ioopm_list_remove(ioopm_list_t *list, int index) {
+elem_t ioopm_list_remove(ioopm_list_t *list, size_t index) {
 
     assert(!ioopm_list_is_empty(list));
     assert(index>=0);
@@ -137,7 +138,7 @@ int ioopm_list_remove(ioopm_list_t *list, int index) {
     }
     else {
         node_t *prev = list->head;
-        for (int i = 0; i < index-1; i++) {
+        for (size_t i = 0; i < index-1; i++) {
             prev = prev->next;
         }
 
@@ -147,7 +148,7 @@ int ioopm_list_remove(ioopm_list_t *list, int index) {
             list->last = prev;
         }
     }
-    int value = removed_node->value;
+    elem_t value = removed_node->value;
     free(removed_node);
     list->size--;
     return value;

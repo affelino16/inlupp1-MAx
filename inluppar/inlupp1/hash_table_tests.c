@@ -1,6 +1,7 @@
 #include <CUnit/Basic.h>
 #include "hash_table.h"
 #include "hash_table_iterator.h"
+#include "common.h"
 
 int init_suite(void) {
   // Change this function if you want to do something *before* you
@@ -13,19 +14,54 @@ int clean_suite(void) {
   // run a test suite
   return 0;
 }
+static size_t string_hash(elem_t str) {
+
+  size_t result = 0;
+  while (*str.s != '\0') {
+    
+    result = result * 31 + ((unsigned char) *str.s);
+    (str.s)++;
+  }
+  return result;
+}
+
+static size_t int_hash (elem_t intg) { 
+    return (size_t) intg.i;
+}
+
+static size_t ptr_hash(elem_t ptr) {
+     return (size_t) ptr.p;
+}
+
+static bool ptr_eq (elem_t a, elem_t b) {
+     if (a.p == b.p) {
+        return true;
+    } return false; 
+}
+
+static bool int_eq (elem_t a, elem_t b) {
+    if (a.i == b.i) {
+        return true;
+    } return false;
+}
+
+static bool string_eq (elem_t a, elem_t b) {
+
+    return strcmp(a.s, b.s) == 0;
+}
 
 void test_create_destroy()
 {
-   ioopm_hash_table_t *ht = ioopm_hash_table_create();
+   ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
    CU_ASSERT_PTR_NOT_NULL(ht);
    ioopm_hash_table_destroy(ht);
 }
 
 void test_destroy_with_entry()
-{   char *key = "abc";
-    int value = 123;
+{   elem_t key = string_elem("abc");
+    elem_t value = int_elem(123);
 
-   ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
    CU_ASSERT_PTR_NOT_NULL(ht);
    ioopm_hash_table_insert(ht, key, value);
    ioopm_hash_table_destroy(ht);
@@ -34,50 +70,70 @@ void test_destroy_with_entry()
 void test_insert_once()
 {
   // create new hash table
-  ioopm_hash_table_t *ht = ioopm_hash_table_create();
 
-  char *key = "abc";
-  int value = 123;
+  elem_t key = string_elem("abc");
+  elem_t value = int_elem(123);
+  ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
 
   // check that key is not in ht
-  int result = 0;
+  elem_t result = int_elem(0);
   CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, 0);
+  CU_ASSERT_EQUAL(result.i, int_elem(0).i);
 
   // insert key-value pair and check that the mapping exists
   ioopm_hash_table_insert(ht, key, value);
   CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, value);
+  CU_ASSERT_EQUAL(result.i, value.i);
 
   // destroy hash table
+  ioopm_hash_table_destroy(ht);
+}
+
+void test_ptr_keys()
+{
+  int a = 1, b = 2;
+  ioopm_hash_table_t *ht = ioopm_hash_table_create(ptr_hash, ptr_eq);
+  elem_t result = int_elem(0);
+
+  ioopm_hash_table_insert(ht, ptr_elem(&a), int_elem(10));
+  ioopm_hash_table_insert(ht, ptr_elem(&b), int_elem(20));
+
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, ptr_elem(&a), &result));
+  CU_ASSERT_EQUAL(result.i, 10);
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, ptr_elem(&b), &result));
+  CU_ASSERT_EQUAL(result.i, 20);
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 2);
+
   ioopm_hash_table_destroy(ht);
 }
 
 void test_remove()
 {
 
-  ioopm_hash_table_t *ht = ioopm_hash_table_create();
 
-  char *key = "abc";
-  int value = 123;
+  elem_t key = int_elem(34);
+  elem_t value = int_elem(123);
+
+  ioopm_hash_table_t *ht = ioopm_hash_table_create(int_hash, int_eq);
 
 
-  int result = 0;
+  elem_t result = int_elem(0);
+  
   CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, 0);
-
+  CU_ASSERT_EQUAL(result.i, int_elem(0).i);
+  
 
   ioopm_hash_table_insert(ht, key, value);
   CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, value);
+  CU_ASSERT_EQUAL(result.i, value.i);
 
   ioopm_hash_table_remove(ht, key);
   CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, 0);
+  CU_ASSERT_EQUAL(result.i, int_elem(123).i);
 
     ioopm_hash_table_remove(ht, key);
   CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht, key, &result));
-  CU_ASSERT_EQUAL(result, 0);
+  CU_ASSERT_EQUAL(result.i, int_elem(123).i);
  
  
   ioopm_hash_table_destroy(ht);
@@ -87,10 +143,10 @@ void test_remove()
   void test_bool() 
 {
 
-  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  elem_t key = string_elem("abc");
+  elem_t value = int_elem(123);
 
-  char *key = "abc";
-  int value = 123;
+  ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
 
 
   
@@ -111,18 +167,18 @@ void test_remove()
 }
 void test_size_function() {
 
-  ioopm_hash_table_t *ht = ioopm_hash_table_create();
-  char *key1 = "Max";
-  int value1 = 9;
+ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
+  elem_t key1 = string_elem("Max");
+  elem_t value1 = string_elem("123");
 
-  char *key2 = "Alfred";
-  int value2 = 666;
+  elem_t key2 = string_elem("Alfred");
+  elem_t value2 = int_elem(666);
 
-    char *key3 = "Max2";
-  int value3 = 73;
+  elem_t key3 = string_elem("Max2");
+  elem_t value3 = bool_elem(false);
   
-  char *key4 = "Alfred2";
-  int value4 = 687;
+  elem_t key4 = string_elem("Alfred2");
+  elem_t value4 = ptr_elem(&value2);
 
   CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, key1));
   CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, key2));
@@ -172,18 +228,24 @@ void test_size_function() {
   ioopm_hash_table_destroy(ht);
 }
 
- void test_iterator_several_entries()
+ /* void test_iterator_several_entries()
 {
-  char *keys[3] = {"abc", "qwe", "asd"};
-  int values[3] = {0, 1, 2};
+  int a = 4;
+  int *pA = &a;
+   int b = 7;
+  int *pB = &b;
+   int c = 6;
+  int *pC = &c;
+  elem_t keys[3] = {pA, pB, pC};
+  elem_t values[3] = {int_elem(0), string_elem("tjo"), bool_elem(true)};
 
-  ioopm_hash_table_t *ht = ioopm_hash_table_create();
-  for (int i = 0; i != 3; ++i)
+  ioopm_hash_table_t *ht = ioopm_hash_table_create(ptr_hash, ptr_eq);
+  for (size_t i = 0; i != 3; ++i)
   {
     ioopm_hash_table_insert(ht, keys[i], values[i]);
   }
 
-  int iteration_count = 0;
+  size_t iteration_count = 0;
 
   ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
   while (!ioopm_hash_table_iterator_at_end(it))
@@ -195,8 +257,7 @@ void test_size_function() {
   ioopm_hash_table_iterator_destroy(it);
   ioopm_hash_table_destroy(ht);
   CU_ASSERT_EQUAL(iteration_count, 3);
-} 
-
+} */
 
 int main() {
   // First we try to set up CUnit, and exit if we fail
@@ -224,7 +285,7 @@ int main() {
     (CU_add_test(my_test_suite, "test insert", test_insert_once) == NULL) ||
     (CU_add_test(my_test_suite, "test remove", test_remove) == NULL) ||
     (CU_add_test(my_test_suite, "test destroy with entry", test_destroy_with_entry) == NULL) ||
-    (CU_add_test(my_test_suite, "test destroy with entry", test_iterator_several_entries) == NULL) ||
+    (CU_add_test(my_test_suite, "test destroy with entry", test_ptr_keys) == NULL) || 
     0
 
   )

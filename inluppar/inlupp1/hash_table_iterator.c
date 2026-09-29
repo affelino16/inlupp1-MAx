@@ -10,8 +10,8 @@
 
 struct entry
 {
-    char *key;
-    int value;
+    elem_t key;
+    elem_t value;
     entry_t *next;
 };
 
@@ -19,12 +19,12 @@ struct hash_table
 {
 
     entry_t buckets[No_Buckets];
-    int size;
+    size_t size;
 };
 
 struct hash_table_iterator {
     ioopm_hash_table_t *ht;
-    int current_bucket;
+    size_t current_bucket;
     entry_t *current_entry;
 };
 
@@ -86,11 +86,11 @@ void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it) {
 }
 
 
-char *ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it) {
+elem_t ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it) {
     return it->current_entry->key;
 }
 
 
-int ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it) {
+elem_t ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it) {
     return it->current_entry->value;
 }
