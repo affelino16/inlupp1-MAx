@@ -2,26 +2,44 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include "common.h"
 #include <string.h>
 #include "hash_table.h"
 #include "hash_table_iterator.h"
 #define Delimiters "+-#@()[]{}.,:;!? \t\n\r"
+
+static bool string_eq (elem_t a, elem_t b) {
+
+    return strcmp(a.s, b.s) == 0;
+}
+
+static size_t string_hash(elem_t str) {
+
+  size_t result = 0;
+  while (*str.s != '\0') {
+    
+    result = result * 31 + ((unsigned char) *str.s);
+    (str.s)++;
+  }
+  return result;
+}
+
 /// @brief Process a single word, updating its frequency
 /// @param word the word to process
 /// @param ht a hash table containing the frequencies of the words found so far
 void process_word(char *word, ioopm_hash_table_t *ht)
 {
 // FIXME: Rewrite to match your own interface, error-handling, etc.
-    int value;
+    elem_t value;
     int freq;
-    if (ioopm_hash_table_has_key(ht, word)) {
-        ioopm_hash_table_lookup(ht, word, &value);
-        freq = value + 1;
-        ioopm_hash_table_insert(ht, word, freq);
+    if (ioopm_hash_table_has_key(ht, string_elem(word))) {
+        ioopm_hash_table_lookup(ht, string_elem(word), &value);
+        freq = value.i + 1;
+        ioopm_hash_table_insert(ht, string_elem(word), int_elem(freq));
 
     } else {
         freq = 1;
-        ioopm_hash_table_insert(ht, strdup(word), freq);
+        ioopm_hash_table_insert(ht, string_elem(strdup(word)), int_elem(freq));
     }
 
 }
@@ -94,7 +112,7 @@ int main(int argc, char *argv[])
         printf("Usage: %s file1 ... filen", argv[0]);
         return 1;
     }
-    ioopm_hash_table_t *ht = ioopm_hash_table_create();
+    ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
     for (int i = 1; i < argc; ++i)
     {
         process_file(argv[i], ht);
@@ -104,10 +122,10 @@ int main(int argc, char *argv[])
     ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
     int j = 0;
     while(!ioopm_hash_table_iterator_at_end(it)) {
-        char *key = ioopm_hash_table_iterator_current_key(it);
-        int value = ioopm_hash_table_iterator_current_value(it);
-        freq_words[j].word = key;
-        freq_words[j].freq = value;
+        elem_t key = ioopm_hash_table_iterator_current_key(it);
+        elem_t value = ioopm_hash_table_iterator_current_value(it);
+        freq_words[j].word = key.s;
+        freq_words[j].freq = value.i;
         j++;
         ioopm_hash_table_iterator_advance(it);
 
