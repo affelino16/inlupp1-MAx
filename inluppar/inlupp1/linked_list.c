@@ -33,7 +33,7 @@ void ioopm_list_destroy(ioopm_list_t *list) {
     free(list);
 }
 
-static node_t *new_node(int value, node_t *next) {
+ node_t *new_node(int value, node_t *next) {
     node_t *node = calloc(1, sizeof(node_t));
     node->value= value;
     node->next = next;

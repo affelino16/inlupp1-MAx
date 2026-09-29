@@ -4,6 +4,7 @@
 typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
 typedef struct node node_t;
 
+node_t new_node(int value, node_t *next);
 
 /// @brief Creates a new empty list
 /// @return an empty linked list

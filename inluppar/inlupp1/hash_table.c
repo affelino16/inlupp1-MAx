@@ -19,15 +19,18 @@ struct entry {
 struct hash_table {
 
     entry_t buckets[No_Buckets];
-    int size;
+    size_t size;
 };
 
-static int string_knr_hash(char *key) {
-    int sum = 0;
-    for (int i = 0; i < strlen(key); i++) {
-        sum = sum + key[i];
-    }
-    return sum;
+static size_t string_knr_hash(const char *str)
+{
+  size_t result = 0;
+  while (*str != '\0')
+  {
+    result = result * 31 + ((unsigned char) *str);
+    str++;
+  }
+  return result;
 }
 
 ioopm_hash_table_t *ioopm_hash_table_create()
@@ -133,7 +136,7 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, char *key) {
     } else return false;
 }
 
-int ioopm_hash_table_size(ioopm_hash_table_t *ht) {
+size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) {
     return ht->size;
 }
 

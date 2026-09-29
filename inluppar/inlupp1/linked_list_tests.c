@@ -18,9 +18,9 @@ int clean_suite(void) {
 
 void test_create_destroy()
 {
-   ioopm_list_t *it = ioopm_hash_table_create();
+   ioopm_list_t *it = ioopm_list_create();
    CU_ASSERT_PTR_NOT_NULL(it);
-   ioopm_hash_table_destroy(it);
+   ioopm_list_destroy(it);
 }
 
 void test2(void) {
@@ -68,3 +68,5 @@ int main() {
   CU_cleanup_registry();
   return CU_get_error();
 } 
+
+// gcc -Wall linked_list.c linked_list_iterator.c linked_list_tests.c -o linked_list_tests -lcunit
