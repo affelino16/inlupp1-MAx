@@ -228,7 +228,7 @@ ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
   ioopm_hash_table_destroy(ht);
 }
 
- /* void test_iterator_several_entries()
+ void test_iterator_several_entries()
 {
   int a = 4;
   int *pA = &a;
@@ -236,7 +236,7 @@ ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
   int *pB = &b;
    int c = 6;
   int *pC = &c;
-  elem_t keys[3] = {pA, pB, pC};
+  elem_t keys[3] = {ptr_elem(pA),ptr_elem(pB),ptr_elem(pC)};
   elem_t values[3] = {int_elem(0), string_elem("tjo"), bool_elem(true)};
 
   ioopm_hash_table_t *ht = ioopm_hash_table_create(ptr_hash, ptr_eq);
@@ -257,7 +257,7 @@ ioopm_hash_table_t *ht = ioopm_hash_table_create(string_hash, string_eq);
   ioopm_hash_table_iterator_destroy(it);
   ioopm_hash_table_destroy(ht);
   CU_ASSERT_EQUAL(iteration_count, 3);
-} */
+} 
 
 int main() {
   // First we try to set up CUnit, and exit if we fail
@@ -286,6 +286,7 @@ int main() {
     (CU_add_test(my_test_suite, "test remove", test_remove) == NULL) ||
     (CU_add_test(my_test_suite, "test destroy with entry", test_destroy_with_entry) == NULL) ||
     (CU_add_test(my_test_suite, "test destroy with entry", test_ptr_keys) == NULL) || 
+    (CU_add_test(my_test_suite, "test destroy with entry", test_iterator_several_entries) == NULL) || 
     0
 
   )
@@ -309,3 +310,4 @@ int main() {
 
 // gcc -Wall hash_table.c hash_table_tests.c -o hash_table_tests -lcunit
 // gcc -Wall hash_table.c hash_table_iterator.c hash_table_tests.c -o hash_table_tests -lcunit
+// gcov hash_table_tests-hash_table.gcno hash_table_tests-hash_table_iterator.gcno
