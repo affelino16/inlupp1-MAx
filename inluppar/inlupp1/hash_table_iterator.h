@@ -4,7 +4,7 @@
 #include <stddef.h>
 /**
 * @file hash_table_iterator.h
-* @author write both your names here
+* @author Alfred Ingvoldstad, Max Molund
 * @date 1 Sep 2022
 * @brief Simple hash table iterator
 *

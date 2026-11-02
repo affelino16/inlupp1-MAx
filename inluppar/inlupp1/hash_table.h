@@ -7,7 +7,7 @@
 #include "common.h"
 /**
 * @file hash_table.h
-* @author write both your names here
+* @author Alfred Ingvoldstad, Max Molund
 * @date write the date you started working on this
 * @brief Simple hash table that maps string keys to integer values.
 *
@@ -24,7 +24,7 @@ typedef struct entry entry_t;
 
 /// @brief Create a new hash table with size 0
 /// @return A new empty hash table
-ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function *hash_fn, ioopm_eq_function *key_eq_fn);;
+ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function *hash_fn, ioopm_eq_function *key_eq_fn);
 
 /// @brief Delete a hash table and free its memory
 /// @param ht a hash table to be deleted

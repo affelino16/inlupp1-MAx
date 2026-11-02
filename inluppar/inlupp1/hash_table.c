@@ -10,6 +10,8 @@
 
 //M37, M38, J26, J27
 
+
+
 struct entry {
 
     elem_t key;
@@ -25,7 +27,7 @@ struct hash_table {
     size_t size;
 };
 
-/* static size_t string_hash(elem_t str) {
+static size_t string_hash(elem_t str) {
 
   size_t result = 0;
   while (*str.s != '\0') {
@@ -59,7 +61,9 @@ static bool int_eq (elem_t a, elem_t b) {
 static bool string_eq (elem_t a, elem_t b) {
 
     return strcmp(a.s, b.s) == 0;
-} */
+} 
+
+
 
 ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function *hash_fn, ioopm_eq_function *key_eq_fn)
 {
