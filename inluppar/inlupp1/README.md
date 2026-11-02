@@ -37,9 +37,6 @@ Authors: Alfred Ingvoldstad,
 
 - _..._
 
-## Major changes
-
-- _..._
 
 # Initial Profiling Results
 
