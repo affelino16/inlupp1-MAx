@@ -285,8 +285,8 @@ int main() {
     (CU_add_test(my_test_suite, "test insert", test_insert_once) == NULL) ||
     (CU_add_test(my_test_suite, "test remove", test_remove) == NULL) ||
     (CU_add_test(my_test_suite, "test destroy with entry", test_destroy_with_entry) == NULL) ||
-    (CU_add_test(my_test_suite, "test destroy with entry", test_ptr_keys) == NULL) || 
-    (CU_add_test(my_test_suite, "test destroy with entry", test_iterator_several_entries) == NULL) || 
+    (CU_add_test(my_test_suite, "test with pointers", test_ptr_keys) == NULL) || 
+    (CU_add_test(my_test_suite, "test iterator", test_iterator_several_entries) == NULL) || 
     0
 
   )
@@ -308,6 +308,3 @@ int main() {
   return CU_get_error();
 } 
 
-// gcc -Wall hash_table.c hash_table_tests.c -o hash_table_tests -lcunit
-// gcc -Wall hash_table.c hash_table_iterator.c hash_table_tests.c -o hash_table_tests -lcunit
-// gcov hash_table_tests-hash_table.gcno hash_table_tests-hash_table_iterator.gcno

@@ -30,7 +30,6 @@ static size_t string_hash(elem_t str) {
 /// @param ht a hash table containing the frequencies of the words found so far
 void process_word(char *word, ioopm_hash_table_t *ht)
 {
-// FIXME: Rewrite to match your own interface, error-handling, etc.
     elem_t value;
     int freq;
     if (ioopm_hash_table_has_key(ht, string_elem(word))) {
@@ -118,7 +117,7 @@ int main(int argc, char *argv[])
     {
         process_file(argv[i], ht);
     }
-    int size = ioopm_hash_table_size(ht);
+    size_t size = ioopm_hash_table_size(ht);
     struct freq_word freq_words[size];
     ioopm_hash_table_iterator_t *it = ioopm_hash_table_iterator_create(ht);
     int j = 0;

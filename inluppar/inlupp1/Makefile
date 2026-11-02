@@ -46,8 +46,10 @@ run: freq_count
 # --- Coverage (gcov) ---
 coverage:
 	$(CC) $(CFLAGS) --coverage hash_table_tests.c hash_table.c hash_table_iterator.c -o hash_table_tests_cov $(LDLIBS)
+	$(CC) $(CFLAGS) --coverage linked_list_tests.c linked_list.c linked_list_iterator.c -o linked_list_tests_cov $(LDLIBS)
 	./hash_table_tests_cov
-	gcov hash_table_tests_cov-hash_table.c hash_table_tests_cov-hash_table_iterator.c
+	./linked_list_tests_cov
+	gcov hash_table_tests_cov-hash_table.c hash_table_tests_cov-hash_table_iterator.c linked_list_tests_cov-linked_list.c linked_list_tests_cov-linked_list_iterator.c
 
 clean:
-	rm -f *.o *.gcda *.gcno *.gcov freq_count hash_table_tests linked_list_tests hash_table_tests_cov
+	rm -f *.o *.gcda *.gcno *.gcov freq_count hash_table_tests linked_list_tests hash_table_tests_cov linked_list_tests_cov

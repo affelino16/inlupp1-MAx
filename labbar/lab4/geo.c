@@ -64,7 +64,11 @@ int area_rect (rectangle_t *rect){
 }
 
 bool intersects_rect(rectangle_t *r1, rectangle_t *r2) {
-    
+    point_t ul1 = r1->ul;
+    point_t ul2 = r2->ul;
+    point_t lr1 = r1->lr;
+    point_t lr2 = r2->lr;
+    if (ul1.x < lr2.x || )
 
 }
 

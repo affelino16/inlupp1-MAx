@@ -25,15 +25,13 @@ item_t make_item (char *name, char *desc, int price, char *shelf) {
     
 bool is_shelf(char *shelf) {
     int len = strlen(shelf);
-    if (is_number(&shelf[0])) {
+    if (len < 2 || is_number(&shelf[0])) {
         return false;
     } else for (int i = 1 ; i < len; i++) {
         if (!is_number(&shelf[i])) {
             return false;
-        }  else {
-            return true;
         }
-    }
+    } return true;
 }
 char *ask_question_shelf(char *question) {
      answer_t shelf = ask_question(question, is_shelf,(convert_func *)strdup);
@@ -78,15 +76,15 @@ char *magick(char *arr1[], char *arr2[], char* arr3[], int len) {
      return strdup(buf);
 }
 
-void list_db(item_t *items, int no_items) {
-    for (int i = 0; i < no_items; i++) {
+void list_db(item_t *items, int *no_items) {
+    for (int i = 0; i < *no_items; i++) {
         printf("%d. %s\n", i + 1, items[i].name);
     }
 }
 
-item_t *edit_db(item_t *items, int no_items) {
+item_t *edit_db(item_t *items, int *no_items) {
     int index = ask_question_int("Vilken vara vill du ändra?") - 1;
-    if (index < 0 || index > no_items) {
+    if (index < 0 || index >= *no_items) {
         printf("Den varan finns inte!\n");
         return items;
     } else print_item(&items[index]);
@@ -95,12 +93,90 @@ item_t *edit_db(item_t *items, int no_items) {
       return items;
 }
 
+void print_menu() {
+    printf("[L]ägga till en vara\n"
+    "[T]a bort en vara\n"
+    "[R]edigera en vara\n"
+    "Ån[g]ra senaste ändringen\n"
+    "Lista [h]ela varukatalogen\n"
+    "[A]vsluta\n");
+}
+
+bool is_valid_menu (char *input) {
+   char check = toupper(input[0]);
+   if (input[1] != '\0') {
+    return false;
+   } else if (check == 'L' || check == 'T' || check == 'R' || check == 'G' || check == 'H' || check == 'A') {
+    return true;
+   } else {
+    return false;
+   }
+}
+
+
+
+char *ask_question_menu(char *question) {
+    print_menu();
+    answer_t menu = ask_question(question, is_valid_menu,(convert_func *)strdup);
+    return menu.string_value;
+
+}
+
+item_t *add_item_to_db (item_t *db, int *db_size) {
+    if (*db_size >= 16) {
+        printf("Databasen är full!\n");
+        return db;
+    } else {
+    item_t new_item = input_item();
+    db[*db_size] = new_item; 
+    (*db_size)++;
+    return db;
+    }
+    
+}
+item_t *remove_item_from_db(item_t *db, int *db_size) {
+    list_db(db, db_size);
+    int index = ask_question_int("Vilken vara ska tas bort?") - 1;
+        if (index < 0 || index >= *db_size) {
+            printf("Varan finns inte!");
+            return db;
+        } else {
+            for (int i = index; i < *db_size - 1; i++) {
+                db[i] = db[i + 1];
+            } (*db_size)--;
+        } return db;
+
+}
+item_t *event_loop(item_t *db, int *db_size) {
+    char *c = ask_question_menu("Vad vill du göra?");
+    char choice = toupper(c[0]);
+    while (choice != 'A') {
+        if (choice == 'L') {
+            add_item_to_db(db, db_size);
+        } else if (choice == 'T') {
+            remove_item_from_db(db, db_size);
+        } else if (choice == 'R') {
+            edit_db(db, db_size);
+        } else if (choice == 'G') {
+            printf ("Not yet implemented\n");
+        } else if (choice == 'H') {
+            list_db(db, db_size);
+        } else {
+            printf("Välj giltlig funktion!\n");
+        }
+        c = ask_question_menu("Vad vill du göra?");
+        choice = toupper(c[0]);
+    } return db;
+}
+
+
+
 
 int main(int argc, char *argv[])
 {
-  char *array1[] = { "hej", "hallå", "scuba" }; // TODO: Lägg till!
-  char *array2[] = { "då", "där","libre" }; // TODO: Lägg till!
-  char *array3[] = {"kompis", "vän", "bror"}; // TODO: Lägg till!
+  char *array1[] = {"grön", "röd", "blå"  }; // TODO: Lägg till!
+  char *array2[] = { "brun", "gul", "rosa"}; // TODO: Lägg till!
+  char *array3[] = {"maskin", "grej", "sak" }; // TODO: Lägg till!
 
   if (argc < 2)
   {
@@ -145,8 +221,12 @@ int main(int argc, char *argv[])
       }
 
      // Skriv ut innehållet
-     list_db(db,db_siz);
-     edit_db(db,db_siz);
+     for (int i = 0; i < db_siz; ++i)
+     {
+       print_item(&db[i]);
+     }
+     event_loop(db, &db_siz);
+
   }
   return 0;
 }
