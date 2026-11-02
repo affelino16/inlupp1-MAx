@@ -8,7 +8,7 @@
 #include <assert.h>
 #include "common.h"
 
-/// Must be kept identical to the definitions in linked_list.c
+
 struct node {
     elem_t value;
     struct node *next;

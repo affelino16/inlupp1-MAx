@@ -8,7 +8,7 @@
 #include <assert.h>
 #define No_Buckets 17
 
-/// Must be kept identical to the definitions in hash_table.c
+
 struct entry
 {
     elem_t key;

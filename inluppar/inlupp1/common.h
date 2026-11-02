@@ -11,7 +11,7 @@
 * @file common.h
 * @author Alfred Ingvoldstad, Max Molund
 * @date 29 september 2026
-* @brief Simple hash table that maps string keys to integer values.
+* @brief Structs for both linked lists and hash tables
 */
 
 typedef union elem elem_t;
@@ -27,9 +27,8 @@ union elem
   char *s;
 };
 
+
 typedef bool ioopm_eq_function(elem_t a, elem_t b);
-
-
 typedef size_t ioopm_hash_function(elem_t key);
 
 
