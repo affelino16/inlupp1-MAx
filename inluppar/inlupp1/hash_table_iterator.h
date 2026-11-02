@@ -5,7 +5,7 @@
 /**
 * @file hash_table_iterator.h
 * @author Alfred Ingvoldstad, Max Molund
-* @date 1 Sep 2022
+* @date 22 september 2026
 * @brief Simple hash table iterator
 *
 * Hash table iterators provide an interface to iterate through all entries in a hash table.
@@ -27,7 +27,7 @@ void ioopm_hash_table_iterator_destroy(ioopm_hash_table_iterator_t *it);
 
 /// @brief Check if the current element exists, or equivalently, if it is positioned at an entry
 /// @param it iterator operated upon
-/// @return true iff the current element exists
+/// @return true if the iterator is at its end
 bool ioopm_hash_table_iterator_at_end(ioopm_hash_table_iterator_t *it);
 
 /// @brief Move the iterator forward to the next entry if it exists or to at-the-end if no more entries exist
@@ -44,5 +44,5 @@ elem_t ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it);
 /// @brief Get the value of the current entry
 /// @pre it is positioned at an entry
 /// @param it iterator operated upon
-/// @return the value if the current entry
+/// @return the value of the current entry
 elem_t ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it);

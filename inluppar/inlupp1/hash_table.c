@@ -8,7 +8,6 @@
 #include "common.h"
 #define No_Buckets 17
 
-//M37, M38, J26, J27
 
 
 
@@ -21,6 +20,7 @@ struct entry {
 
 struct hash_table {
 
+    /// Each bucket is a sentinel entry that holds no data; real entries start at buckets[i].next
     entry_t buckets[No_Buckets];
     ioopm_hash_function *hash_fn;
     ioopm_eq_function *key_eq_fn;

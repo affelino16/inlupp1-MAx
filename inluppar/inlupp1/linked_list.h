@@ -3,9 +3,21 @@
 #include <stddef.h>
 #include "common.h"
 
-typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
-typedef struct node node_t;
+/**
+* @file linked_list.h
+* @author Alfred Ingvoldstad, Max Molund
+* @date 23 september
+* @brief Generic singly linked list
 
+*/
+
+typedef struct list ioopm_list_t;
+typedef struct node node_t; 
+
+///@brief creates a new node
+///@param value value assigned to the new node
+///@param next pointer to the next node
+///@return a new node
 node_t *new_node(elem_t value, node_t *next);
 
 /// @brief Creates a new empty list
@@ -29,11 +41,13 @@ void ioopm_list_prepend(ioopm_list_t *list, elem_t value);
 /// @brief Return the first element of a linked list in O(1) time
 /// @pre the list is non-empty
 /// @param list the linked list to take the head of
+/// @return the head of list
 elem_t ioopm_list_head(ioopm_list_t *list);
 
 /// @brief Return the last element of a linked list in O(1) time
 /// @pre the list is non-empty
 /// @param list the linked list to take the last element of
+///@return the last element in list
 elem_t ioopm_list_last(ioopm_list_t *list);
 
 /// @brief Insert an element into a linked list in O(n) time.
@@ -59,7 +73,7 @@ elem_t ioopm_list_remove(ioopm_list_t *list, size_t index);
 /// The valid values of index are [0,n-1] for a list of n elements,
 /// where 0 means the first element and n-1 means the last element.
 /// @pre 0 <= index < length(list)
-/// @param list the linked list that will be extended
+/// @param list the linked list that will be retrieved from
 /// @param index the position in the list
 /// @return the value at the given position
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index);

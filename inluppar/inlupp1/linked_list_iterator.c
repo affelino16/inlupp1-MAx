@@ -8,6 +8,7 @@
 #include <assert.h>
 #include "common.h"
 
+/// Must be kept identical to the definitions in linked_list.c
 struct node {
     elem_t value;
     struct node *next;
@@ -62,7 +63,7 @@ elem_t ioopm_list_iterator_current(ioopm_list_iterator_t *iter) {
 
 
 elem_t ioopm_list_iterator_remove(ioopm_list_iterator_t *iter) {
-    
+    assert(!ioopm_list_iterator_at_end(iter) && "iterator at end");
     node_t *removed = iter->current;
     elem_t value = removed->value;
     node_t *next = removed->next;

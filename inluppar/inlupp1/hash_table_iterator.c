@@ -8,6 +8,7 @@
 #include <assert.h>
 #define No_Buckets 17
 
+/// Must be kept identical to the definitions in hash_table.c
 struct entry
 {
     elem_t key;
@@ -15,10 +16,11 @@ struct entry
     entry_t *next;
 };
 
-struct hash_table
-{
+struct hash_table {
 
     entry_t buckets[No_Buckets];
+    ioopm_hash_function *hash_fn;
+    ioopm_eq_function *key_eq_fn;
     size_t size;
 };
 
@@ -37,7 +39,7 @@ static void advance_iterator_state(ioopm_hash_table_iterator_t *it)
     {
         it->current_bucket += 1;
 
-
+        /// After the last bucket current_entry stays NULL, which means the iterator is at its end
         if (it->current_bucket != No_Buckets)
         {
             it->current_entry = &it->ht->buckets[it->current_bucket];
@@ -87,10 +89,12 @@ void ioopm_hash_table_iterator_advance(ioopm_hash_table_iterator_t *it) {
 
 
 elem_t ioopm_hash_table_iterator_current_key(ioopm_hash_table_iterator_t *it) {
+    assert(!ioopm_hash_table_iterator_at_end(it) && "current_entry = NULL");
     return it->current_entry->key;
 }
 
 
 elem_t ioopm_hash_table_iterator_current_value(ioopm_hash_table_iterator_t *it) {
+    assert(!ioopm_hash_table_iterator_at_end(it) && "current_entry = NULL");
     return it->current_entry->value;
 }

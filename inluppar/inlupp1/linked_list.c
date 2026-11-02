@@ -71,7 +71,6 @@ size_t ioopm_list_size(ioopm_list_t *list) {
 elem_t ioopm_list_get(ioopm_list_t *list, size_t index) {
 
     assert(!ioopm_list_is_empty(list));
-    assert(index >= 0);
     assert(index < list->size);
 
     node_t *element = list->head;
@@ -82,11 +81,14 @@ elem_t ioopm_list_get(ioopm_list_t *list, size_t index) {
 
 }
 
+
 elem_t ioopm_list_head(ioopm_list_t *list) {
+    assert(list->head!=NULL);
     return list->head->value;
 }
 
 elem_t ioopm_list_last(ioopm_list_t *list) {
+    assert(list->last!=NULL);
     return list->last->value;
 }
 
@@ -101,7 +103,6 @@ bool ioopm_list_is_empty(ioopm_list_t *list) {
 }
 
 void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t value) {
-    assert(index>=0);
     assert(index<=list->size);
     if (index == 0) {
         ioopm_list_prepend(list, value);
@@ -124,7 +125,6 @@ void ioopm_list_insert(ioopm_list_t *list, size_t index, elem_t value) {
 elem_t ioopm_list_remove(ioopm_list_t *list, size_t index) {
 
     assert(!ioopm_list_is_empty(list));
-    assert(index>=0);
     assert(index<list->size);
 
     node_t *removed_node;
